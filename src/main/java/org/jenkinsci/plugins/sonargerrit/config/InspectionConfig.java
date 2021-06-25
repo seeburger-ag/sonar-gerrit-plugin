@@ -2,17 +2,6 @@ package org.jenkinsci.plugins.sonargerrit.config;
 
 import static org.jenkinsci.plugins.sonargerrit.util.Localization.getLocalized;
 
-import javax.annotation.Nonnull;
-
-import org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher;
-import org.jenkinsci.plugins.sonargerrit.sonar.SonarClient;
-import org.jenkinsci.plugins.sonargerrit.sonar.SonarUtil;
-import org.jenkinsci.plugins.sonargerrit.sonar.dto.Component;
-import org.jenkinsci.plugins.sonargerrit.sonar.dto.ComponentSearchResult;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
-import org.kohsuke.stapler.QueryParameter;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -25,6 +14,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+
+import org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher;
+import org.jenkinsci.plugins.sonargerrit.sonar.SonarClient;
+import org.jenkinsci.plugins.sonargerrit.sonar.SonarUtil;
+import org.jenkinsci.plugins.sonargerrit.sonar.dto.Component;
+import org.jenkinsci.plugins.sonargerrit.sonar.dto.ComponentSearchResult;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.QueryParameter;
 
 import com.google.common.base.MoreObjects;
 
@@ -64,6 +64,8 @@ public class InspectionConfig extends AbstractDescribableImpl<InspectionConfig> 
     private String type;
 
     private String sonarInstallationName;
+
+    private boolean autoMatchforPullRequest;
 
     @DataBoundConstructor
     public InspectionConfig() {
@@ -163,6 +165,9 @@ public class InspectionConfig extends AbstractDescribableImpl<InspectionConfig> 
     }
 
     public boolean isPathCorrectionNeeded() {
+        if (isAnalysisTypePullRequest()) {
+            return isAutoMatchforPullRequest();
+        }
         return isAutoMatch();
     }
 
@@ -173,6 +178,21 @@ public class InspectionConfig extends AbstractDescribableImpl<InspectionConfig> 
     @DataBoundSetter
     public void setPullRequestKey(String pullRequestKey) {
         this.pullRequestKey = pullRequestKey;
+    }
+
+    public boolean isAnalysisTypePullRequest() {
+        return DescriptorImpl.AnalysisType.PULL_REQUEST == getAnalysisType();
+    }
+
+    public boolean isAutoMatchforPullRequest() {
+        return autoMatchforPullRequest;
+    }
+
+    @DataBoundSetter
+    public void setAutoMatchforPullRequest(boolean autoMatchforPullRequest) {
+        if (isAnalysisTypePullRequest()) {
+            this.autoMatchforPullRequest = autoMatchforPullRequest;
+        }
     }
 
     public String getComponent() {

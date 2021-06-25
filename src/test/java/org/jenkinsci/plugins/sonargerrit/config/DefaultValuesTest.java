@@ -1,9 +1,9 @@
 package org.jenkinsci.plugins.sonargerrit.config;
 
-import junit.framework.Assert;
-import org.junit.Test;
-
 import java.util.ArrayList;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Project: Sonar-Gerrit Plugin
@@ -115,6 +115,7 @@ public class DefaultValuesTest implements BaseConfigTest {
         Assert.assertEquals(PROJECT_PATH, config.getBaseConfig().getProjectPath());
         Assert.assertFalse(config.isMultiConfigMode());
         Assert.assertEquals(PATH_AUTO_MATCH, config.getBaseConfig().isAutoMatch());
+        Assert.assertEquals(PATH_AUTO_MATCH, config.isAutoMatchforPullRequest());
 
         Assert.assertNotNull(config.getSubJobConfigs());
         Assert.assertEquals(1, config.getSubJobConfigs().size());

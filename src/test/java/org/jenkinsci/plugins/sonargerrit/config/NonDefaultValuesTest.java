@@ -1,10 +1,10 @@
 package org.jenkinsci.plugins.sonargerrit.config;
 
-import junit.framework.Assert;
-import org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher;
-import org.junit.Test;
-
 import java.util.ArrayList;
+
+import org.jenkinsci.plugins.sonargerrit.config.InspectionConfig.DescriptorImpl;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Project: Sonar-Gerrit Plugin
@@ -367,8 +367,10 @@ public class NonDefaultValuesTest implements DetailedConfigTest {
         config.setAutoMatch(true);
         Assert.assertTrue(config.getBaseConfig().isAutoMatch());
         Assert.assertEquals(config.isAutoMatch(), config.getBaseConfig().isAutoMatch());
-        config.setType("multi");
+        Assert.assertTrue(config.isPathCorrectionNeeded());
+        config.setType(DescriptorImpl.MULTI_TYPE);
         Assert.assertNotSame(config.isAutoMatch(), config.getBaseConfig().isAutoMatch());
+        Assert.assertFalse(config.isPathCorrectionNeeded());
 
         Assert.assertEquals("Test1", config.getServerURL());
         Assert.assertEquals("Test2", config.getBaseConfig().getSonarReportPath());
@@ -377,6 +379,15 @@ public class NonDefaultValuesTest implements DetailedConfigTest {
         Assert.assertNotSame(config.getBaseConfig(), new ArrayList<>(config.getAllSubJobConfigs()).get(0));
         Assert.assertEquals(new ArrayList<>(config.getSubJobConfigs()).get(0), new ArrayList<>(config.getAllSubJobConfigs()).get(0));
 
+        config.setAutoMatchforPullRequest(true);
+        Assert.assertFalse(config.isAutoMatchforPullRequest());
+
+        config.setAnalysisType(DescriptorImpl.AnalysisType.PULL_REQUEST);
+        Assert.assertFalse(config.isPathCorrectionNeeded());
+
+        config.setAutoMatchforPullRequest(true);
+        Assert.assertTrue(config.isAutoMatchforPullRequest());
+        Assert.assertTrue(config.isPathCorrectionNeeded());
     }
 
     @Override

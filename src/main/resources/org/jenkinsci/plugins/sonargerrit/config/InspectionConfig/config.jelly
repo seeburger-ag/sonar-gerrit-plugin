@@ -35,6 +35,12 @@
             <f:entry title="${%jenkins.plugin.settings.inspection.component}" field="component">
                 <f:combobox/>
             </f:entry>
+
+            <f:entry
+                    title="${%jenkins.plugin.settings.inspection.base.config.allow.auto.match}"
+                    field="autoMatchforPullRequest">
+                <f:checkbox selected="${autoMatchforPullRequest}" default="${descriptor.AUTO_MATCH}"/>
+            </f:entry>
         </f:nested>
     </f:radioBlock>
 

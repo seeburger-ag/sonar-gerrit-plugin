@@ -1,10 +1,10 @@
 package org.jenkinsci.plugins.sonargerrit.config;
 
-import junit.framework.Assert;
-import org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher;
-import org.junit.Test;
-
 import java.util.ArrayList;
+
+import org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Project: Sonar-Gerrit Plugin
@@ -188,6 +188,7 @@ public class NullValuesTest implements DetailedConfigTest {
         Assert.assertEquals(SONAR_REPORT_PATH, config.getBaseConfig().getSonarReportPath());
         Assert.assertEquals(PROJECT_PATH, config.getBaseConfig().getProjectPath());
         Assert.assertEquals(PATH_AUTO_MATCH, config.getBaseConfig().isAutoMatch());
+        Assert.assertEquals(PATH_AUTO_MATCH, config.isAutoMatchforPullRequest());
         Assert.assertNotNull(config.getSubJobConfigs());
         Assert.assertEquals(1, config.getSubJobConfigs().size());
         SubJobConfig subJobConfig = new ArrayList<>(config.getAllSubJobConfigs()).get(0);
@@ -204,6 +205,7 @@ public class NullValuesTest implements DetailedConfigTest {
         Assert.assertEquals(SONAR_REPORT_PATH, config.getBaseConfig().getSonarReportPath());
         Assert.assertEquals(PROJECT_PATH, config.getBaseConfig().getProjectPath());
         Assert.assertEquals(PATH_AUTO_MATCH, config.getBaseConfig().isAutoMatch());
+        Assert.assertEquals(PATH_AUTO_MATCH, config.isAutoMatchforPullRequest());
 
         Assert.assertNotNull(config.getSubJobConfigs());
         Assert.assertEquals(1, config.getSubJobConfigs().size());

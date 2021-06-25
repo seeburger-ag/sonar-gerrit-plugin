@@ -2,6 +2,12 @@ package org.jenkinsci.plugins.sonargerrit.inspection.sonarqube;
 
 import static org.jenkinsci.plugins.sonargerrit.util.Localization.getLocalized;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.jenkinsci.plugins.plaincredentials.StringCredentials;
 import org.jenkinsci.plugins.sonargerrit.TaskListenerLogger;
 import org.jenkinsci.plugins.sonargerrit.config.InspectionConfig;
@@ -14,13 +20,6 @@ import org.jenkinsci.plugins.sonargerrit.sonar.SonarClient;
 import org.jenkinsci.plugins.sonargerrit.sonar.SonarUtil;
 import org.jenkinsci.plugins.tokenmacro.MacroEvaluationException;
 import org.jenkinsci.plugins.tokenmacro.TokenMacro;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.google.common.collect.Multimap;
 
@@ -41,7 +40,7 @@ public class SonarConnector implements InspectionReportAdapter {
 
     private static final Logger LOGGER = Logger.getLogger(SonarConnector.class.getName());
 
-    private static final Duration SECONDS_TO_WAIT = Duration.ofSeconds(15);
+    private static final long SECONDS_TO_WAIT = 15;
 
     private final Run<?, ?> run;
 
@@ -91,8 +90,8 @@ public class SonarConnector implements InspectionReportAdapter {
                 .getSonarInstallation(inspectionConfig.getSonarInstallationName());
         StringCredentials credentials = sonarInstallation.getCredentials(run);
 
-        TaskListenerLogger.logMessage(listener, LOGGER, Level.FINE, "jenkins.plugin.sonar.issues.wait", SECONDS_TO_WAIT);
-        Thread.sleep(SECONDS_TO_WAIT.getSeconds() * 1000);
+        TaskListenerLogger.logMessage(listener, LOGGER, Level.FINE, "jenkins.plugin.sonar.issues.wait", Long.toString(SECONDS_TO_WAIT));
+        Thread.sleep(SECONDS_TO_WAIT * 1000);
 
         try (SonarClient sonarClient = new SonarClient(sonarInstallation, credentials, listener)) {
             Report report = sonarClient.fetchIssues(
