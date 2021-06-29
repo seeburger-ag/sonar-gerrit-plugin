@@ -25,6 +25,10 @@ import com.google.common.collect.Multimap;
 
 import hudson.AbortException;
 import hudson.FilePath;
+import hudson.maven.MavenModule;
+import hudson.maven.MavenModuleSet;
+import hudson.maven.MavenModuleSetBuild;
+import hudson.model.Job;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.plugins.sonar.SonarInstallation;
@@ -60,12 +64,27 @@ public class SonarConnector implements InspectionReportAdapter {
         List<ReportInfo> reports;
 
         if (inspectionConfig.getAnalysisType() == InspectionConfig.DescriptorImpl.AnalysisType.PULL_REQUEST) {
+            ensureComponentConfig();
             reports = fetchReportFromSonarQube(workspace);
         } else {
             reports = readReportFromFile(workspace);
         }
 
         inspectionReport = new InspectionReport(reports);
+    }
+
+    private void ensureComponentConfig()
+    {
+        if ((inspectionConfig.getComponent() == null || inspectionConfig.getComponent().trim().isEmpty()) && run instanceof MavenModuleSetBuild)
+        {
+            Job<?,?> job = run.getParent();
+            if (job instanceof MavenModuleSet) {
+                MavenModule mod = ((MavenModuleSet)job).getRootModule();
+                String component = mod.getGroupId() + ":" +  mod.getArtifactId();
+                TaskListenerLogger.logMessage(listener, LOGGER, Level.INFO, "jenkins.plugin.sonar.component.lookup", component);
+                inspectionConfig.setComponent(component);
+            }
+        }
     }
 
     private List<ReportInfo> readReportFromFile(FilePath workspace) throws IOException, InterruptedException {
