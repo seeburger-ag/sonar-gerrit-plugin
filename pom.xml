@@ -51,12 +51,23 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:ssh://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/jenkinsci/${project.artifactId}-plugin.git
+        <connection>scm:git:git@github.com:seeburger-ag/${project.artifactId}-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:seeburger-ag/${project.artifactId}-plugin.git
         </developerConnection>
-        <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
+        <url>https://github.com/seeburger-ag/${project.artifactId}-plugin</url>
         <tag>sonar-gerrit-2.4.3</tag>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>release</id>
+            <url>https://repo.seeburger.de/archiva/repository/release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshot</id>
+            <url>https://repo.seeburger.de/archiva/repository/snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <repositories>
         <repository>
@@ -216,6 +227,8 @@
             <artifactId>sonar</artifactId>
             <version>2.12</version>
         </dependency>
+
+
 
         <dependency>
             <groupId>com.google.code.gson</groupId>

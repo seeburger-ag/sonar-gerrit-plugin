@@ -5,3 +5,6 @@ target/**
 /work/**
 **/*.localized
 commands.rtf
+/.classpath
+/.project
+/.settings/
