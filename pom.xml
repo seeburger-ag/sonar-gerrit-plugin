@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>sonar-gerrit</artifactId>
-    <version>2.4.3.SEE1</version>
+    <version>2.4.4-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <properties>
@@ -54,7 +54,7 @@
         <developerConnection>scm:git:git@github.com:seeburger-ag/${project.artifactId}-plugin.git
         </developerConnection>
         <url>https://github.com/seeburger-ag/${project.artifactId}-plugin</url>
-        <tag>sonar-gerrit-2.4.3.SEE1</tag>
+        <tag>sonar-gerrit-2.4.3</tag>
     </scm>
 
     <distributionManagement>
